@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -7,7 +6,7 @@ import { ScanResult } from '@/types/scan';
 import { saveScan, generateScanReport } from '@/utils/scanUtils';
 import { toast } from 'sonner';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, FileChart } from 'lucide-react';
+import { FileText, FileSearch } from 'lucide-react';
 
 interface ScanResultsProps {
   result: ScanResult | null;
@@ -67,7 +66,7 @@ const ScanResults: React.FC<ScanResultsProps> = ({ result, onClearResult, onGene
       <CardHeader className="pb-3">
         <div className="flex justify-between items-center">
           <CardTitle className="text-2xl cyber-text flex items-center gap-2">
-            <FileChart size={24} className="text-scanner-accent" />
+            <FileSearch size={24} className="text-scanner-accent" />
             Scan Results
           </CardTitle>
           <Badge 

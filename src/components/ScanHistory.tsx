@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScanResult } from '@/types/scan';
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { deleteScan, clearAllScans } from '@/utils/scanUtils';
+import { deleteScan, clearAllScans, generateScanReport } from '@/utils/scanUtils';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { FileText, Trash2, Alert, Search } from 'lucide-react';
+import { FileText, Trash2, AlertCircle, Search } from 'lucide-react';
 
 interface ScanHistoryProps {
   scans: ScanResult[];
@@ -48,6 +48,11 @@ const ScanHistory: React.FC<ScanHistoryProps> = ({
     onHistoryUpdated();
     setConfirmClearOpen(false);
   };
+
+  const handleGenerateReport = (scan: ScanResult) => {
+    const reportText = generateScanReport(scan);
+    onGenerateReport(reportText);
+  };
   
   return (
     <>
@@ -86,7 +91,7 @@ const ScanHistory: React.FC<ScanHistoryProps> = ({
                           <span className="text-lg font-code text-scanner-accent">{scan.ipAddress}</span>
                           {scan.status === 'error' && (
                             <span className="text-scanner-danger text-xs font-bold flex items-center">
-                              <Alert size={12} className="mr-1" /> Error
+                              <AlertCircle size={12} className="mr-1" /> Error
                             </span>
                           )}
                         </div>
@@ -118,7 +123,7 @@ const ScanHistory: React.FC<ScanHistoryProps> = ({
                           variant="ghost"
                           size="icon"
                           className="h-8 w-8 text-muted-foreground hover:text-scanner-accent"
-                          onClick={() => onGenerateReport(scan)}
+                          onClick={() => handleGenerateReport(scan)}
                           disabled={scan.status !== 'completed'}
                           title="Generate report"
                         >
