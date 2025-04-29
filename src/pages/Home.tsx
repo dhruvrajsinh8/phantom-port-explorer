@@ -1,12 +1,12 @@
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Server, Activity, Network, ArrowRight } from 'lucide-react';
+import { Server, Activity, Network, ArrowRight, Info } from 'lucide-react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import NetworkGraph from '@/components/NetworkGraph';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Dummy data for network scanning
 const networkDevices = [
@@ -22,6 +22,31 @@ const networkDevices = [
 
 const Home = () => {
   const [highlightedDevice, setHighlightedDevice] = useState<number | null>(null);
+  const [graphStats, setGraphStats] = useState({
+    nodeCount: 0,
+    connectionCount: 0,
+    activeNodes: 0
+  });
+  
+  // Simulate updating stats
+  useEffect(() => {
+    // Initial stats
+    setGraphStats({
+      nodeCount: 35,
+      connectionCount: 68,
+      activeNodes: 29
+    });
+    
+    // Simulate periodic updates
+    const interval = setInterval(() => {
+      setGraphStats(prev => ({
+        ...prev,
+        activeNodes: Math.max(20, Math.min(35, prev.activeNodes + Math.floor(Math.random() * 3) - 1))
+      }));
+    }, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
   
   return (
     <div className="min-h-screen bg-scanner-bg overflow-x-hidden">
@@ -38,18 +63,59 @@ const Home = () => {
           </p>
         </header>
         
-        {/* Interactive Network Graph */}
-        <div className="mb-12 h-[40vh] scanner-card p-4 relative">
-          <h2 className="text-2xl cyber-text mb-4">Network Topology</h2>
-          <NetworkGraph 
-            highlightedNode={highlightedDevice} 
-            onNodeClick={(id) => setHighlightedDevice(id === highlightedDevice ? null : id)} 
-          />
-          <div className="absolute bottom-4 right-4 bg-scanner-bg/70 p-2 rounded-md border border-scanner-accent/30 text-xs">
-            <div className="flex items-center gap-2">
-              <span>Hover nodes to inspect</span>
-              <span className="block h-2 w-2 rounded-full bg-scanner-success animate-pulse"></span>
+        {/* Interactive Network Graph with Stats */}
+        <div className="mb-12 scanner-card p-4 relative">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl cyber-text">Network Topology</h2>
+            <div className="flex items-center gap-3">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 bg-scanner-bg/80 p-2 rounded-md border border-scanner-accent/30">
+                    <div className="h-2 w-2 rounded-full bg-scanner-accent animate-pulse"></div>
+                    <span className="text-xs">{graphStats.nodeCount} Devices</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Total devices on network</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 bg-scanner-bg/80 p-2 rounded-md border border-scanner-accent/30">
+                    <div className="h-2 w-2 rounded-full bg-scanner-success animate-pulse"></div>
+                    <span className="text-xs">{graphStats.activeNodes} Active</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Devices currently transmitting data</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 bg-scanner-bg/80 p-2 rounded-md border border-scanner-accent/30">
+                    <div className="h-2 w-2 rounded-full bg-scanner-warning animate-pulse"></div>
+                    <span className="text-xs">{graphStats.connectionCount} Connections</span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Active network connections</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
+          </div>
+          
+          <div className="h-[40vh] relative">
+            <NetworkGraph 
+              highlightedNode={highlightedDevice} 
+              onNodeClick={(id) => setHighlightedDevice(id === highlightedDevice ? null : id)} 
+            />
+          </div>
+          
+          <div className="absolute bottom-4 right-4 bg-scanner-bg/70 p-2 rounded-md border border-scanner-accent/30 text-xs flex items-center gap-2">
+            <Info className="h-3 w-3 text-scanner-accent" />
+            <span>Hover over nodes to inspect · Click to select</span>
           </div>
         </div>
         
