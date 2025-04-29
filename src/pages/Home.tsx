@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Server, Activity, Network, ArrowRight, Info } from 'lucide-react';
+import { Server, Activity, Network, ArrowRight, Info, Terminal, Shield, ChevronRight, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import NetworkGraph from '@/components/NetworkGraph';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from "@/components/ui/hover-card";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import Navbar from '@/components/Navbar';
 
 // Dummy data for network scanning
 const networkDevices = [
@@ -53,7 +54,10 @@ const Home = () => {
       {/* Scanline effect */}
       <div className="scanline" />
       
-      <div className="container py-8">
+      {/* Add Navbar */}
+      <Navbar />
+      
+      <div className="container py-8 mt-16">
         <header className="text-center mb-12">
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold cyber-text glow mb-4">
             Network Intelligence Suite
@@ -61,7 +65,100 @@ const Home = () => {
           <p className="mt-2 text-xl text-muted-foreground max-w-2xl mx-auto">
             Advanced scanning and visualization tools for your network infrastructure
           </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 mt-6">
+            <Button className="bg-scanner-accent text-scanner-bg hover:bg-scanner-accent/80">
+              <Activity className="mr-2 h-4 w-4" /> Quick Scan
+            </Button>
+            <Button variant="outline" className="border-scanner-accent/30 text-scanner-accent hover:bg-scanner-accent/10">
+              <Shield className="mr-2 h-4 w-4" /> View Security Status
+            </Button>
+          </div>
         </header>
+        
+        {/* Status Dashboard */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+          <Card className="scanner-card flex-1">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">Network Status</h3>
+                <Badge variant="outline" className="bg-scanner-success/10 text-scanner-success border-scanner-success/30">
+                  Secure
+                </Badge>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Active Devices</span>
+                  <span className="font-medium">{networkDevices.filter(d => d.status === 'online').length}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Total Devices</span>
+                  <span className="font-medium">{networkDevices.length}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Last Scan</span>
+                  <span className="font-medium">2 minutes ago</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="scanner-card flex-1">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">Traffic Analysis</h3>
+                <Badge variant="outline" className="bg-scanner-accent/10 text-scanner-accent border-scanner-accent/30">
+                  Normal
+                </Badge>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Current Traffic</span>
+                  <span className="font-medium">3.2 MB/s</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Peak Today</span>
+                  <span className="font-medium">12.5 MB/s</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-muted-foreground">Traffic Pattern</span>
+                  <span className="font-medium">Standard</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="scanner-card flex-1">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium">Security Alerts</h3>
+                <Badge variant="outline" className="bg-scanner-warning/10 text-scanner-warning border-scanner-warning/30">
+                  2 Warnings
+                </Badge>
+              </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <AlertTriangle className="h-4 w-4 text-scanner-warning mr-2" />
+                    <span className="text-muted-foreground">Port Scan Attempt</span>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-7 px-2">
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center">
+                    <AlertTriangle className="h-4 w-4 text-scanner-warning mr-2" />
+                    <span className="text-muted-foreground">Outdated Firmware</span>
+                  </div>
+                  <Button variant="ghost" size="sm" className="h-7 px-2">
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
         
         {/* Interactive Network Graph with Stats */}
         <div className="mb-12 scanner-card p-4 relative">
@@ -255,11 +352,78 @@ const Home = () => {
           </CardContent>
         </Card>
         
+        {/* Integration Highlight Section */}
+        <div className="mb-10">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl cyber-text">External Integrations</h2>
+            <Link to="/integrations">
+              <Button variant="ghost" className="text-scanner-accent hover:bg-scanner-accent/10">
+                View All <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="scanner-card h-full border-scanner-accent/30 transition-all hover:border-scanner-accent/50">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-scanner-accent/10 flex items-center justify-center">
+                    <Terminal className="h-5 w-5 text-scanner-accent" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">Nmap Integration</h3>
+                    <p className="text-sm text-muted-foreground">Powerful network scanning</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Connect to the Nmap scanning engine for advanced reconnaissance and vulnerability detection.
+                </p>
+              </CardContent>
+              <CardFooter className="px-6 pb-6 pt-0">
+                <Link to="/integrations" className="w-full">
+                  <Button variant="outline" className="w-full border-scanner-accent text-scanner-accent hover:bg-scanner-accent/10">
+                    Configure Nmap Integration
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+            
+            <Card className="scanner-card h-full border-scanner-warning/30 transition-all hover:border-scanner-warning/50">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-scanner-warning/10 flex items-center justify-center">
+                    <Activity className="h-5 w-5 text-scanner-warning" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-medium">Wireshark Integration</h3>
+                    <p className="text-sm text-muted-foreground">Deep packet inspection</p>
+                  </div>
+                </div>
+                <p className="text-muted-foreground mb-4">
+                  Connect to Wireshark for real-time packet analysis and detailed traffic monitoring.
+                </p>
+              </CardContent>
+              <CardFooter className="px-6 pb-6 pt-0">
+                <Link to="/integrations" className="w-full">
+                  <Button variant="outline" className="w-full border-scanner-warning text-scanner-warning hover:bg-scanner-warning/10">
+                    Configure Wireshark Integration
+                  </Button>
+                </Link>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+        
         <footer className="mt-10 text-center text-sm text-muted-foreground">
           <p>Network Intelligence Suite - For Educational Purposes Only</p>
           <p className="text-xs mt-1">
             This is a demonstration tool and uses simulated scan data. No actual network scanning is performed.
           </p>
+          <div className="flex justify-center gap-4 mt-4">
+            <Link to="/about" className="text-xs text-muted-foreground hover:text-scanner-accent">About</Link>
+            <Link to="/help" className="text-xs text-muted-foreground hover:text-scanner-accent">Help</Link>
+            <Link to="/integrations" className="text-xs text-muted-foreground hover:text-scanner-accent">Integrations</Link>
+          </div>
         </footer>
       </div>
     </div>
